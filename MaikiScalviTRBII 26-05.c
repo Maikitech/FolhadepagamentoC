@@ -3,31 +3,27 @@
 
 int main()
 {
-    // case 1:
     int menu1, menu2;
     char razaoSocial[20];
     int cnpj;
     char endereco[50];
-    // case2:
     int mesAtual;
     char nomeCompleto[30];
     char cargo[20];
     int mesAniversario;
     int numHorastrabalhadas;
     float valorHora;
-    // case 2 parte conta
-    
-    float soma25;
-    float soma50;
-    float horasExcedentes25;
-    float horasExcedentes50;
-    // case 3 IRPF
-    float imposto = 0.0;
-    // Inicializa variáveis
     float somaNormal = 0.0;
     float adicional25 = 0.0;
     float adicional50 = 0.0;
-    float salarioBruto;
+    float salarioBruto = 0.0;
+    int horasNormais = 220;
+    int horasExcedentes25 = 0;
+    int horasExcedentes50 = 0;
+    float inss = 0.0;
+    float salarioLiquidoinss;
+    float irpf = 0.0;
+    float salarioLiquidoirpf;
 
     do
     {
@@ -40,26 +36,26 @@ int main()
         scanf("%i", &menu1);
 
         switch (menu1)
-        {       // Primeiro Menu
-        case 1: // Configurar dados da empresa.
+        {       
+        case 1:
             printf("Configurando dados da empresa:\n\n");
             printf("Digite a razao social da empresa:\n");
-            scanf("%s", &razaoSocial);
+            scanf("%s", razaoSocial);
             printf("Digite o CNPJ:\n");
             scanf("%i", &cnpj);
             printf("Digite o endereço:\n");
-            scanf("%s", &endereco);
+            scanf("%s", endereco);
             break;
 
-        case 2: // Calcular salario mensal.
+        case 2:
             printf("Digite o mes atual:(EX: '01' para Janeiro)\n");
             scanf("%i", &mesAtual);
 
             printf("Digite o nome completo do funcionario:\n");
-            scanf("%s", &nomeCompleto);
+            scanf("%s", nomeCompleto);
 
             printf("Digite o cargo do funcionario:\n");
-            scanf("%s", &cargo);
+            scanf("%s", cargo);
 
             printf("Digite o mes de aniversário:\n");
             scanf("%i", &mesAniversario);
@@ -70,10 +66,9 @@ int main()
             printf("Digite o valor de cada hora trabalhada desse funcionário:\n");
             scanf("%f", &valorHora);
 
-            // Partindo para as contas
             do
             {
-                printf("Menu interativo, selecione uma opção abaixo:\n\n");
+                printf("\nMenu interativo, selecione uma opção abaixo:\n\n");
                 printf("1) - Calcular salario bruto mensal: \n");
                 printf("2) - Calcular INSS: \n");
                 printf("3) - Calcular IRPF: \n");
@@ -83,75 +78,93 @@ int main()
                 switch (menu2)
                 {
                 case 1:
-                    // Calcula o salário com base nas horas trabalhadas
                     if (numHorastrabalhadas <= 220)
                     {
                         somaNormal = numHorastrabalhadas * valorHora;
                     }
                     else if (numHorastrabalhadas <= 240)
                     {
-                        int horasNormais = 220;
-                        int horasExcedentes25 = numHorastrabalhadas - horasNormais;
+                        horasExcedentes25 = numHorastrabalhadas - horasNormais;
                         somaNormal = horasNormais * valorHora;
-                        adicional25 = horasExcedentes25 * valorHora * 0.25;
+                        adicional25 = horasExcedentes25 * valorHora * 1.25;
                     }
                     else
                     {
-                        int horasNormais = 220;
-                        int horasExcedentes25 = 20; // 240 - 220 = 20 horas
-                        int horasExcedentes50 = numHorastrabalhadas - 240;
-                        somaNormal = horasNormais * valorHora;
-                        adicional25 = horasExcedentes25 * valorHora * 0.25;
-                        adicional50 = horasExcedentes50 * valorHora * 0.50;
+                        horasExcedentes25 = 20;
+                        horasExcedentes50 = numHorastrabalhadas - 240;
+                        somaNormal = numHorastrabalhadas * valorHora;
+                        adicional25 = horasExcedentes25 * valorHora * 1.25;
+                        adicional50 = horasExcedentes50 * valorHora * 1.50;
                     }
-
-                    // Calcula o salário bruto
                     salarioBruto = somaNormal + adicional25 + adicional50;
 
-                    // Exibe o resultado
                     printf("Salario Base: R$ %.2f\n", somaNormal);
                     printf("Adicional 25%%: R$ %.2f\n", adicional25);
                     printf("Adicional 50%%: R$ %.2f\n", adicional50);
                     printf("Salario Bruto: R$ %.2f\n", salarioBruto);
-                           
 
                     break;
 
-                case 2: // calculado INSS
-
-                    printf("Calculo de INSS:\n");
-                    printf("Calculo de INSS:\n");
-                    printf("Calculo de INSS:\n");
-                    break;
-                case 3:
-                    printf("Calculo IRPF:\n");
-                    printf("");
-                    float salario;
-
-                    if (salario <= 2259.20)
+                case 2:
+                    if (salarioBruto <= 1412.00)
                     {
-                        imposto = 0.0;
+                        inss = salarioBruto * 0.075;
                     }
-                    else if (salario <= 2826.65)
+                    else if (salarioBruto <= 2666.68)
                     {
-                        imposto = (salario * 0.075) - 169.44;
+                        inss = (salarioBruto * 0.09) - 21.18;
                     }
-                    else if (salario <= 3751.05)
+                    else if (salarioBruto <= 4000.03)
                     {
-                        imposto = (salario * 0.15) - 381.44;
+                        inss = (salarioBruto * 0.12) - 101.18;
                     }
-                    else if (salario <= 4664.68)
+                    else if (salarioBruto <= 7786.02)
                     {
-                        imposto = (salario * 0.225) - 662.77;
+                        inss = (salarioBruto * 0.14) - 181.18;
                     }
                     else
                     {
-                        imposto = (salario * 0.275) - 896.00;
+                        printf("Valor digitado incorretamente, tente novamente\n");
                     }
-
-                    printf("Calculo de IRPF:\n");
+                    salarioLiquidoinss = salarioBruto - inss;
+                    printf("Calculo de INSS:\n");
+                    printf("O valor do INSS a ser pago é: R$ %.2f\n", inss);
+                    printf("O valor total a receber é: R$ %.2f\n", salarioLiquidoinss);
 
                     break;
+
+                case 3:
+                    if (salarioBruto <= 2259.20)
+                    {
+                        irpf = 0.0;
+                    }
+                    else if (salarioBruto <= 2826.65)
+                    {
+                        irpf = (salarioLiquidoinss * 0.075) - 169.44;
+                    }
+                    else if (salarioBruto <= 3751.05)
+                    {
+                        irpf = (salarioLiquidoinss * 0.15) - 381.44;
+                    }
+                    else if (salarioBruto <= 4664.68)
+                    {
+                        irpf = (salarioLiquidoinss * 0.225) - 662.77;
+                    }
+                    else if (salarioBruto > 4664.68)
+                    {
+                        irpf = (4664.68 * 0.275) - 896.00;
+                    }
+                    else
+                    {
+                        printf("Valor digitado incorretamente, tente novamente\n");
+                    }
+                    salarioLiquidoirpf = salarioLiquidoinss - irpf;
+                    printf("Calculo de IRPF:\n");
+                    printf("O valor do IRPF a ser pago é: R$ %.2f\n", irpf);
+                    printf("O valor total a receber é: R$ %.2f\n", salarioLiquidoirpf);
+
+                    break;
+
                 case 4:
                     printf("Saindo do menu interativo.\n");
                     break;
@@ -159,14 +172,14 @@ int main()
                     printf("Opção inválida.\n");
                     break;
                 }
-            } while (menu2 != 4); // Final do segundo while menu2
-            break; // Adicionado break aqui para evitar cair no próximo case
+            } while (menu2 != 4);
+            break;
 
-        case 3: // Imprimir contracheque.
+        case 3:
             printf("Impressão de contracheque pendente.\n");
             break;
 
-        case 4: // Sair
+        case 4:
             printf("Saindo do programa.\n");
             break;
 
@@ -174,30 +187,5 @@ int main()
             printf("Opção inválida.\n");
             break;
         }
-    } while (menu1 != 4); // Final do primeiro while menu1
+    } while (menu1 != 4);
 }
-
-
-
-
-
-
- //TESTANDO NOVO CASE 1 DO MENU2
-                    // if (numHorastrabalhadas <= 220)
-                    // {
-                    //    somaNormal = (numHorastrabalhadas * valorHora);
-                    //    printf("A soma do numero de horas trabalhadas adicionando o valor por hora, fica em R$ %.2f\n", somaNormal);
-                    //}
-
-                    // if (numHorastrabalhadas >= 221 && numHorastrabalhadas <= 240)
-                    //{
-                    //    horasExcedentes25 = (numHorastrabalhadas - 220);
-                    //    somaNormal = (horasExcedentes25 * valorHora * 1.25) + (220 * valorHora);
-                    //    printf("O valor a ser pago de horas normais com horas excedentes é de R$ %.2f\n", somaNormal);
-                    //}
-                    // if (numHorastrabalhadas>240)
-                    //{
-                    //    horasExcedentes50 = (numHorastrabalhadas - 239);
-                    //    somaNormal = (horasExcedentes50 * valorHora * 1.50)+(239 * valorHora);
-                    //    printf("O valor a ser pago de horas normais com horas excedentes é de R$ %.2f\n", somaNormal);
-                    //}
